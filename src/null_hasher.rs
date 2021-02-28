@@ -36,10 +36,12 @@ mod tests {
 
     #[test]
     fn test_hasher() {
+        // if this fails we've got the bytes backwards :(
         let mut h0 = NullHasher(0);
         h0.write_u64(0xc8c8c8c8);
         assert_eq!(0xc8c8c8c8, h0.finish());
 
+        // validate that we get all 8 bytes in a u64
         let mut h1 = NullHasher(0);
         h1.write_u64(0xc8c8c8c8c8c8c8c8);
         assert_eq!(0xc8c8c8c8c8c8c8c8, h1.finish());
