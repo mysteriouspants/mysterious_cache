@@ -2,7 +2,7 @@
 
 About the quickest and dirtiest implementation of an LRU cache in Rust.
 
-```rs
+```rust
 let mut cache: LruCache<usize, String> = LruCache::with_capacity(5);
 
 cache.insert(0, "Put".to_owned());
