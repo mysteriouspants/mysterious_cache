@@ -4,8 +4,8 @@ use std::{
     marker::PhantomData,
 };
 
-use crate::{cache::Cache, null_hasher::BuildNullHasher};
 use crate::linked_list::{LinkedList, NodeHandle};
+use crate::{cache::Cache, null_hasher::BuildNullHasher};
 
 /// Stores an element in the cache with the handle to its position in the
 /// eviction queue.
@@ -100,13 +100,6 @@ where
         return orig.map(|node| node.value);
     }
 
-    fn get<'a>(&'a mut self, k: &K) -> Option<&'a V> {
-        self.get_mut(k).map(|v| {
-            let v: &V = v;
-            v
-        })
-    }
-
     fn get_mut<'a>(&'a mut self, k: &K) -> Option<&'a mut V> {
         let hash_k = self.hash_k(k);
 
@@ -156,7 +149,8 @@ mod tests {
         // using a nullhasher here makes it a little easier to reason about what
         // key goes to what value should the tests fail. this does mean that the
         // key has to be a u64 or this is liable to fail on 32-bit targets.
-        let mut cache: LruCache<u64, u64, BuildNullHasher> = LruCache::with_capacity_and_hash_builder(5, BuildNullHasher);
+        let mut cache: LruCache<u64, u64, BuildNullHasher> =
+            LruCache::with_capacity_and_hash_builder(5, BuildNullHasher);
 
         // fill up the cache
         assert_eq!(None, cache.insert(0, 0));

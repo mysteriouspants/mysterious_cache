@@ -2,7 +2,10 @@
 //! pre-hashes its keys - so hashing them again in its storage hashmap makes
 //! little sense.
 
-use std::{convert::TryInto, hash::{BuildHasher, Hasher}};
+use std::{
+    convert::TryInto,
+    hash::{BuildHasher, Hasher},
+};
 
 /// Proxies u64's for themselves.
 pub(crate) struct NullHasher(u64);

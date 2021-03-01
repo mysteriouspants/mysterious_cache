@@ -12,7 +12,12 @@ where
 
     /// Get an item from the Cache. This also makes the item the youngest item
     /// in the cache and the least eligible for eviction.
-    fn get<'a>(&'a mut self, k: &K) -> Option<&'a V>;
+    fn get<'a>(&'a mut self, k: &K) -> Option<&'a V> {
+        self.get_mut(k).map(|v| {
+            let v: &V = v;
+            v
+        })
+    }
 
     /// Get a mutable reference to an item from the cache. This also makes the
     /// item the youngest item in the cache and the least elegible for eviction.
