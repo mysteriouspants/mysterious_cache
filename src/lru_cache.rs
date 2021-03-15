@@ -66,7 +66,10 @@ where
         }
     }
 
-    fn hash_k(&self, k: &K) -> KeyHash {
+    fn hash_k<Q>(&self, k: &Q) -> KeyHash
+    where
+        Q: Hash + Eq,
+    {
         let mut h = self.hash_builder.build_hasher();
         k.hash(&mut h);
         h.finish()
@@ -100,7 +103,10 @@ where
         return orig.map(|node| node.value);
     }
 
-    fn get_mut<'a>(&'a mut self, k: &K) -> Option<&'a mut V> {
+    fn get_mut<'a, Q>(&'a mut self, k: &Q) -> Option<&'a mut V>
+    where
+        Q: Hash + Eq,
+    {
         let hash_k = self.hash_k(k);
 
         let rv = self.storage.get_mut(&hash_k);
@@ -116,7 +122,10 @@ where
         self.storage.get_mut(&hash_k).map(|sn| &mut sn.value)
     }
 
-    fn remove(&mut self, k: &K) -> Option<V> {
+    fn remove<Q>(&mut self, k: &Q) -> Option<V>
+    where
+        Q: Hash + Eq,
+    {
         let hash_k = self.hash_k(k);
 
         let rv = self.storage.get(&hash_k);
@@ -174,14 +183,14 @@ mod tests {
         assert_eq!(5, cache.eviction_q.store.len());
 
         // verify the "1" is still there, which should make it the youngest item
-        assert!(cache.get(&1).is_some());
+        assert!(cache.get(&1u64).is_some());
 
         // verify that "2" is now the oldest item and the next to be evicted by
         // putting 6 into the cache
         assert_eq!(None, cache.insert(6, 6));
 
-        assert_eq!(Some(&6), cache.get(&5));
-        assert_eq!(None, cache.get(&7));
+        assert_eq!(Some(&6), cache.get(&5u64));
+        assert_eq!(None, cache.get(&7u64));
     }
 
     #[test]

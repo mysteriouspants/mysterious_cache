@@ -74,7 +74,10 @@ where
 
     /// Gets the time a particular key was inserted into the cache, if present.
     /// Returns Some even if the insertion time is older than the timeout.
-    pub fn get_inserted_at(&mut self, k: &K) -> Option<Instant> {
+    pub fn get_inserted_at<Q>(&mut self, k: &Q) -> Option<Instant>
+    where
+        Q: Hash + Eq,
+    {
         self.cache.get(k).map(|e| e.inserted_at)
     }
 }
@@ -96,7 +99,10 @@ where
             .map(|e| e.value)
     }
 
-    fn get_mut<'a>(&'a mut self, k: &K) -> Option<&'a mut V> {
+    fn get_mut<'a, Q>(&'a mut self, k: &Q) -> Option<&'a mut V>
+    where
+        Q: Hash + Eq,
+    {
         if let Some(inserted_at) = self.get_inserted_at(k) {
             if inserted_at.elapsed() > self.timeout {
                 self.cache.remove(k);
@@ -107,7 +113,10 @@ where
         return self.cache.get_mut(k).map(|e| &mut e.value);
     }
 
-    fn remove(&mut self, k: &K) -> Option<V> {
+    fn remove<Q>(&mut self, k: &Q) -> Option<V>
+    where
+        Q: Hash + Eq,
+    {
         self.cache.remove(k).map(|e| e.value)
     }
 

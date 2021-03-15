@@ -12,7 +12,10 @@ where
 
     /// Get an item from the Cache. This also makes the item the youngest item
     /// in the cache and the least eligible for eviction.
-    fn get<'a>(&'a mut self, k: &K) -> Option<&'a V> {
+    fn get<'a, Q>(&'a mut self, k: &Q) -> Option<&'a V>
+    where
+        Q: Hash + Eq,
+    {
         self.get_mut(k).map(|v| {
             let v: &V = v;
             v
@@ -21,10 +24,14 @@ where
 
     /// Get a mutable reference to an item from the cache. This also makes the
     /// item the youngest item in the cache and the least elegible for eviction.
-    fn get_mut<'a>(&'a mut self, k: &K) -> Option<&'a mut V>;
+    fn get_mut<'a, Q>(&'a mut self, k: &Q) -> Option<&'a mut V>
+    where
+        Q: Hash + Eq;
 
     /// Bust a move, returning whatever was there.
-    fn remove(&mut self, k: &K) -> Option<V>;
+    fn remove<Q>(&mut self, k: &Q) -> Option<V>
+    where
+        Q: Hash + Eq;
 
     /// Clears the cache entirely.
     fn clear(&mut self);
