@@ -87,6 +87,10 @@ where
         if let Some(storage_node) = self.storage.get(&hash_k) {
             // update the entry if it already exists
             self.eviction_q.remove_node(&storage_node.q_node);
+            // the cache is at capacity, so we remove 1 from the size
+            // to counteract the size increment later - this won't
+            // run if below capacity
+            self.size -= 1;
         } else if self.size == self.capacity {
             // evict the least recent addition
             let least_recently_used = self.eviction_q.pop_back().unwrap();
