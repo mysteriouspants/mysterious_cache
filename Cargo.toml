@@ -8,7 +8,6 @@ edition = "2018"
 
 [features]
 default = ["shared_cache"]
-
 shared_cache = ["parking_lot"]
 
 [dependencies]

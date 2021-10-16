@@ -31,26 +31,20 @@ prefetching, but I haven't done any testing to see if any of this is validated.
 In addition there are two other useful caches provided, an Expiring Cache and a
 Shared Cache.
 
-ExpiringLruCache behaves the same way as LruCache, except that on construction
-it is assigned a *timeout*, which is a duration that elements in the cache must
-not be older than in order to be returned.
+ExpiringCache behaves the same way as LruCache, except that on construction it
+is assigned a *timeout*, which is a duration that elements in the cache must not
+be older than in order to be returned.
 
 ```rust
 let mut cache: ExpiringCache<u64, u64> =
     ExpiringCache::with_capacity_and_timeout(1, Duration::from_secs(30));
-// simulate adding something 35 seconds ago
-// this is equivalent to cache.insert(1, 1) followed by sleep(35)
-cache.cache.insert(
-    1,
-    ExpiringEntry {
-        value: 1,
-        inserted_at: Instant::now() - Duration::from_secs(35),
-    },
-);
+cache.insert(1, 1);
+assert_eq!(Some(1), cache.get(&1));
+sleep(Duration::from_secs(31));
 assert_eq!(None, cache.get(&1));
 ```
 
-SharedCache can wrap either LruCache or ExpiringLruCache and provides a
+SharedCache can wrap either LruCache or ExpiringCache and provides a
 Send + Sync container for them, making it slightly easier to use in situations
 where it has to be shared across thread boundaries.
 
