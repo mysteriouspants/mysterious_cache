@@ -192,6 +192,9 @@ mod tests {
         // verify that "2" is now the oldest item and the next to be evicted by
         // putting 6 into the cache
         assert_eq!(None, cache.insert(6, 6));
+        assert_eq!(5, cache.storage.len());
+        assert_eq!(5, cache.eviction_q.len());
+        assert_eq!(5, cache.eviction_q.store.len());
 
         assert_eq!(Some(&6), cache.get(&5u64));
         assert_eq!(None, cache.get(&7u64));
