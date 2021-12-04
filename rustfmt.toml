@@ -1,0 +1,4 @@
+max_width = 72
+
+wrap_comments = true
+comment_width = 69

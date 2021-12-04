@@ -23,10 +23,8 @@ assert_eq!(None, cache.get(&0));
 
 Internally uses no unsafety, no Rc to create the linked list that backs the
 eviction queue. Whether avoiding these things was wise or not is a matter of
-debate. The linked list for the eviction queue is stored on a Vec, so this isn't
-going to do interesting things with heap fragmentation outside of what HashMap
-will already do. It should also help with data locality and processor memory
-prefetching, but I haven't done any testing to see if any of this is validated.
+debate. The eviction queue itself is embedded in the backing hash map, so there
+is no extra storage cost for it.
 
 In addition there are two other useful caches provided, an Expiring Cache and a
 Shared Cache.

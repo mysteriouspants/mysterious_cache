@@ -2,7 +2,7 @@
 
 mod cache;
 mod expiring_cache;
-mod linked_list;
+mod linked_map;
 mod lru_cache;
 mod null_hasher;
 #[cfg(feature = "shared_cache")]

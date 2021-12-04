@@ -4,7 +4,11 @@ use std::{hash::Hash, marker::PhantomData, sync::Arc};
 use crate::cache::Cache;
 
 /// Wrapper for an LruCache which is shareable across thread boundaries.
-pub struct SharedCache<C, K, V>(Arc<RwLock<C>>, PhantomData<K>, PhantomData<V>)
+pub struct SharedCache<C, K, V>(
+    Arc<RwLock<C>>,
+    PhantomData<K>,
+    PhantomData<V>,
+)
 where
     C: Cache<K, V>,
     K: Eq + Hash,
@@ -81,8 +85,15 @@ mod tests {
 
     #[test]
     fn expiring_cache_test() {
-        let cache: SharedCache<ExpiringCache<usize, usize>, usize, usize> = SharedCache::with_cache(
-            ExpiringCache::with_capacity_and_timeout(1, Duration::from_secs(30)),
+        let cache: SharedCache<
+            ExpiringCache<usize, usize>,
+            usize,
+            usize,
+        > = SharedCache::with_cache(
+            ExpiringCache::with_capacity_and_timeout(
+                1,
+                Duration::from_secs(30),
+            ),
         );
         cache.insert(1, 1);
         assert_eq!(Some(1), cache.get(&1));

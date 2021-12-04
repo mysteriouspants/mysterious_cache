@@ -35,7 +35,10 @@ where
     K: Eq + Hash,
 {
     /// Creates a new cache with a given capacity and timeout.
-    pub fn with_capacity_and_timeout(capacity: usize, timeout: Duration) -> Self {
+    pub fn with_capacity_and_timeout(
+        capacity: usize,
+        timeout: Duration,
+    ) -> Self {
         Self {
             cache: LruCache::with_capacity(capacity),
             timeout,
@@ -55,7 +58,10 @@ where
         hash_builder: S,
     ) -> Self {
         Self {
-            cache: LruCache::with_capacity_and_hash_builder(capacity, hash_builder),
+            cache: LruCache::with_capacity_and_hash_builder(
+                capacity,
+                hash_builder,
+            ),
             timeout,
         }
     }
@@ -140,7 +146,10 @@ mod tests {
     #[test]
     fn readme_snippet() {
         let mut cache: ExpiringCache<u64, u64> =
-            ExpiringCache::with_capacity_and_timeout(1, Duration::from_secs(30));
+            ExpiringCache::with_capacity_and_timeout(
+                1,
+                Duration::from_secs(30),
+            );
         // simulate adding something 35 seconds ago
         // this is equivalent to cache.insert(1, 1) followed by sleep(35)
         cache.cache.insert(

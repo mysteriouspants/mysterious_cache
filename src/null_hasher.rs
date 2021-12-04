@@ -12,7 +12,9 @@ pub(crate) struct NullHasher(u64);
 
 impl Hasher for NullHasher {
     fn write(&mut self, bytes: &[u8]) {
-        self.0 = u64::from_ne_bytes(bytes.try_into().expect("Only accept u64's"));
+        self.0 = u64::from_ne_bytes(
+            bytes.try_into().expect("Only accept u64's"),
+        );
     }
 
     fn finish(&self) -> u64 {
